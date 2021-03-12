@@ -40,7 +40,7 @@ export class FeedCommand extends RootCommand {
       this.enforceValidHexTopic()
     }
 
-    return this.hashTopic ? this.bee.makeFeedTopic(this.topic) : this.topic
+    return this.hashTopic ? this.bee.makeFeedTopic(this.topic[1]) : this.topic[1]
   }
 
   protected async getWallet(): Promise<Wallet> {
@@ -51,8 +51,9 @@ export class FeedCommand extends RootCommand {
   }
 
   private enforceValidHexTopic(): void {
-    const hasCorrectLength = this.topic.startsWith('0x') ? this.topic.length === 66 : this.topic.length === 64
-    const hasCorrectPattern = new RegExp(/^(0x)?[a-f0-9]+$/g).test(this.topic)
+    const topic = this.topic[1]
+    const hasCorrectLength = topic.startsWith('0x') ? topic.length === 66 : topic.length === 64
+    const hasCorrectPattern = new RegExp(/^(0x)?[a-f0-9]+$/g).test(topic)
 
     if (!hasCorrectLength || !hasCorrectPattern) {
       this.console.error('Error parsing topic!')
